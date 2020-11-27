@@ -1,0 +1,26 @@
+<!DOCTYPE scml>
+<scml>
+    <head>
+    </head>
+    <main>
+        <assign> a is #adjustor{10;} </assign>
+        <println> "#a{13;} is " #a{13;} </println>
+        <println> "    [it should print #a{13;} is 23]" </println>
+        
+        <assign> u is #a{5;} </assign>
+        <println> "u is " u </println>
+        <println> "    [it should print u is 15]" </println>
+        
+        <assign> b is #adjustor{7;} </assign>
+        <println> "#b{4;} is " #b{4;} </println>
+        <println> "    [it should print #b{4;} is 11]" </println>
+    </main>
+    <helper>
+        <function id='adjustor' args='x;'>
+            <function id='add' args='y;'>
+                x + y
+            </function>
+            add
+        </function>
+    </helper>
+</scml>

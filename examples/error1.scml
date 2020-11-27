@@ -1,0 +1,15 @@
+<! scml>
+<scml>
+    <head>
+    </head>
+    <main>
+        #sum{2; 2;}
+    </main>
+    <helper>
+        <function id='sum' args='x; y;'>
+            <assign> sum is (x + y) </assign>
+            <println> "SUM: " sum </println>
+            sum
+        </function>
+    </helper>
+</scml>

@@ -1,0 +1,166 @@
+*
+*	Sudo Code Markup Language < S C M L >
+* 	Grammar
+*
+*	Created by Ryan Josey for CS 403
+*
+
+#DEFINE EQ - EQUAL
+
+program : doctype scml 
+
+doctype : LESS-THAN EXCLAMATION-POINT DOCTYPE SCML GREATER-THAN
+
+scml : openScmlTag head main helper closeScmlTag 
+
+	openScmlTag : LESS-THAN SCML GREATER-THAN
+
+	closeScmlTag : LESS-THAN FORWARD-SLASH SCML GREATER-THAN
+
+	head: openHead optLink optGlobal closeHead
+
+		openHead : LESS-THAN HEAD GREATER-THAN
+
+		closeHead : LESS-THAN FORWARD-SLASH HEAD GREATER-THAN
+
+		link : LESS-THAN LINK HREF EQ SINGLE-QOUTE STRING SINGLE-QOUTE GREATER-THAN
+
+		optLink : link
+        		| link optlink
+        		| *empty*
+
+		global : LESS-THAN GLOBAL GREATER-THAN optVarAssign LESS-THAN FORWARD-SLASH GLOBAL GREATER-THAN
+
+		optGlobal : global
+             	  | global optGlobal
+              	  | *empty*
+              	  
+        optVarAssign : VARIABLE
+                     | optAssignTag
+                     | *empty*
+
+	main : openMain statements closeMain
+
+		openMain : LESS-THAN MAIN GREATER-THAN
+
+		closeMain : LESS-THAN FORWARD-SLASH MAIN GREATER-THAN
+
+	helper : openHelper functions closeHelper
+
+		openHelper : LESS-THAN HELPER GREATER-THAN
+
+		closeHelper : LESS-THAN FORWARD-SLASH HELPER GREATER-THAN
+
+unary : INTEGER
+      | STRING
+      | VARIABLE
+      | NULL
+      | BREAK
+      | boolean
+      | OPAREN expression CPAREN
+      | MINUS unary
+      | functionCall
+      | array
+      | lambda
+      | class
+      | classCall
+      
+    boolean : TRUE
+            | FALSE
+
+	functionCall : POUND VARIABLE LEFT-CURLY-BRACKET optExpressionList RIGHT-CURLY-BRACKET
+	             : POUND lambda LEFT-CURLY-BRACKET optExpressionList RIGHT-CURLY-BRACKET
+
+	array : LESS-THAN ARRAY SIZE EQ SINGLE-QOUTE INTEGER SINGLE-QOUTE GREATER-THAN VARIABLE LESS-THAN FORWARD-SLASH ARRAY GREATER-THAN
+      	  | LESS-THAN ARRAY GREATER-THAN VARIABLE LESS-THAN FORWARD-SLASH ARRAY GREATER-THAN
+      
+	lambda : LESS-THAN LAMBDA ARGS EQ SINGLE-QOUTE optParamList SINGLE-QOUTE GREATER-THAN statements LESS-THAN FORWARD-SLASH LAMBDA GREATER-THAN
+           | LESS-THAN LAMBDA GREATER-THAN statements LESS-THAN FORWARD-SLASH LAMBDA GREATER-THAN     
+
+	class : doctype scmlClass
+
+		classCall : PERIOD VARIABLE functionCall
+
+		scmlClass : openScmlTag head openClassTag optConstructorSeq closeClassTag helper closeScmlTag 
+
+		openClassTag : LESS-THAN CLASS CLASS EQ SINGLE-QOUTE VARIABLE SINGLE-QOUTE GREATER-THAN
+
+		closeClassTag : LESS-THAN FORWARD-SLASH CLASS GREATER-THAN
+
+		optConstructorSeq : constructorSeq
+                          | *empty*
+                  
+		constructorSeq : constructor
+                       | constructor constructorSeq
+               
+		constructor : LESS-THAN CONSTRUCTOR ID EQ SINGLE-QOUTE VARIABLE SINGLE-QOUTE ARGS EQ SINGLE-QOUTE optParamList SINGLE-QOUTE GREATER-THAN statements LESS-THAN FORWARD-SLASH CONSTRUCTOR GREATER-THAN
+            		| LESS-THAN CONSTRUCTOR ID EQ SINGLE-QOUTE VARIABLE SINGLE-QOUTE GREATER-THAN statements LESS-THAN FORWARD-SLASH CONSTRUCTOR GREATER-THAN
+	 
+	 optUnaryList : unary
+	 	          | unary optUnaryList
+	 	          | *empty*     
+	 
+	 optExpressionList : expression SEMICOLON
+                       | expression SEMICOLON optExpressionList
+                       | *empty*
+                      
+		expression : unary
+	       		   | unary operator expression
+	       		   
+	    operator : PLUS
+		  	 	 | MINUS
+		 	 	 | TIMES
+		 	 	 | DIVIDE
+		 	 	 | MOD
+		 	 	 | PLUS-PLUS
+		 	 	 | MINUS-MINUS
+		 	 	 | CARET
+		 	 	 | LESS-THAN
+		 	 	 | GREATER-THAN
+		 	 	 | LESS-THAN-EQ
+		 	 	 | GREATER-THAN-EQ
+		 	 	 | EQ-EQ
+                  
+statements : statement
+           | statement statements
+
+	statement : expression
+	          | ifStatement
+	          | whileLoop
+	          | forLoop
+	          | statementTag 
+	          | functions
+	            
+	statementTag : optAssignTag
+	             | LESS-THAN PRINT GREATER-THAN optUnaryList LESS-THAN FORWARD-SLASH PRINT GREATER-THAN
+	             | LESS-THAN PRINTLN GREATER-THAN optUnaryList LESS-THAN FORWARD-SLASH PRINTLN GREATER-THAN
+	             | LESS-THAN RETURN GREATER-THAN expression LESS-THAN FORWARD-SLASH RETURN GREATER-THAN 
+	         
+	assignTag : LESS-THAN ASSIGN GREATER-THAN varDef LESS-THAN FORWARD-SLASH ASSIGN GREATER-THAN
+                 | *empty*
+    
+    varDef : VARIABLE optInit
+
+	optInit : IS expression
+            | *empty*
+
+	functions : functionDef
+	          | functionDef functions
+	      
+		functionDef : LESS-THAN FUNCTION ID EQ SINGLE-QOUTE VARIABLE SINGLE-QOUTE ARGS EQ SINGLE-QOUTE optParamList SINGLE-QOUTE GREATER-THAN statements LESS-THAN FORWARD-SLASH FUNCTION GREATER-THAN
+                    | LESS-THAN FUNCTION ID EQ SINGLE-QOUTE VARIABLE SINGLE-QOUTE GREATER-THAN statements LESS-THAN FORWARD-SLASH FUNCTION GREATER-THAN
+       
+		paramList : VARIABLE SEMICOLON
+                  | VARITABLE SEMICOLON paramList
+
+		optParamList : paramList
+	                 | *empty*
+
+ifStatement : LESS-THAN IF CHECK EQ SINGLE-QOUTE expression SINGLE-QOUTE GREATER-THAN statements LESS-THAN FORWARD-SLASH IF GREATER-THAN optElse
+           
+	optElse : LESS-THAN ELSE GREATER-THAN statements LESS-THAN FORWARD-SLASH ELSE GREATER-THAN
+            | LESS-THAN ELSE IF CHECK EQ SINGLE-QOUTE expression SINGLE-QOUTE GREATER-THAN statements LESS-THAN FORWARD-SLASH ELSE IF GREATER-THAN optElse
+        
+whileLoop : LESS-THAN WHILE CHECK EQ SINGLE-QOUTE expression SINGLE-QOUTE GREATER-THAN statements LESS-THAN FORWARD-SLASH WHILE GREATER-THAN
+
+//forLoop : LESS-THAN FOR START EQ SINGLE-QOUTE varDef SINGLE-QOUTE CHECK EQ SINGLE-QOUTE expression SINGLE-QOUTE STEP EQ SINGLE-QOUTE expression SINGLE-QOUTE GREATER-THAN statements LESS-THAN FORWARD-SLASH FOR GREATER-THAN

@@ -1,0 +1,283 @@
+*
+*	Sudo Code Markup Language < S C M L >
+* 	User Guide
+*
+*	Created by Ryan Josey for CS 403
+*
+
+------------------------------- < S C M L > Framework ------------------------------------
+
+SCML was designed to be familiar to a graphic designer that knows how to code in HTML and 
+CSS.  Like HTML SCML requires an open and close tag around most operations.  The SCML
+tags are intended to markup sudo code similar to how you can markup a text document with 
+HTML tags. Below is the minimum code required for a SCML file to run.  Note all tags and 
+keywords are lower case with the exception of DOCTYPE.
+
+	<!DOCTYPE scml>
+	<scml>
+    		<head>
+    			<!-- global variables and imports go here -->
+    		</head>
+    		<main>
+        		<!-- main function -->
+    		</main>
+    		<helper>
+    			<!-- helper functions go here -->
+    		</helper>
+	</scml>
+
+
+Keywords:
+------------------------------------------------------------------------------------------
+	DOCTYPE		scml	head	link	global	href	main	helper
+	
+	null		array	size	args	is	assign	print	println
+	
+	lambda		function	id	if	check	else	while
+	
+	true		false	or	and	break		
+
+
+Supported Tags:
+------------------------------------------------------------------------------------------
+	<scml>		<head>		<main>		<helper>	<link>	<global>
+	
+	<array>		<assign>	<print>		<println>	<if>	<else if>
+	
+	<else>		<while>		<lambda>	<function>
+	
+
+Literals:
+------------------------------------------------------------------------------------------
+	- Positive and Negative Integers
+	- Strings 
+		- Strings are defined by double quotes. Example: "A string"
+	
+
+Variables:
+------------------------------------------------------------------------------------------
+	Variables can be assigned to integers, strings, and functions.  Define a variable
+	without a initial value do as follows:
+		
+				<assign> varName is null </assign>
+	
+	To set a initial value simple replace null with the value. For example:
+	
+				<assign> num is (2 + 3) </assign>
+
+	
+Operators:
+------------------------------------------------------------------------------------------	
+	Numeric: +, -, *, \, %, ++, --, ^
+		
+		-note that divide is \
+	
+	String: +
+	
+	Precedence is not accounted for by default.  To apply precedence use parentheses.
+	
+	Comparisons: <, <=, >, >=, ==, !(not)
+		
+		Comparisons work for both strings and numbers.  When applying not to a comparison
+		wrap the statement in parentheses first and place the bang symbol to the left
+		of the comparison expression. For example:
+						
+				!(2 < 3) -> returns false
+						
+		Combining Comparisons:
+			
+			You can combine comparisons with "and", or "or". For example:
+						
+				((2 < 3) and (1 < 3) -> returns true
+		
+		Boolean:
+			
+			"true" and "false" can be used in comparison expressions. For example
+			
+				((2 < 3) and true) -> returns true
+						
+		Advanced Comparisons: #eq{arg1; arg2;}, #isInt{arg1;}
+			
+			The function eq will check return true if two arguments are the same object.
+			The function isInt will return true if the argument is a integer.
+
+
+Conditionals: 
+------------------------------------------------------------------------------------------
+	SCML supports if, else if, and else conditional statements.  A chain of conditionals
+	can be declared as follows:
+	
+				<if check='condition'>	do something </if>
+				<else if check='condition'> do something </else if>
+				<else> do something </else>
+
+
+Arrays:
+------------------------------------------------------------------------------------------
+	Dynamic:
+		To declare a dynamic array: 
+		
+				<array> name </array>
+		
+		Supported operations:
+			-Insertion at a index:
+				#arrayInsert{name; value; index;} 
+					
+			-Add at end:
+				#arrayAdd{name; value;}
+					
+			-Get a value at a index:
+				#arrayGet{name; index;}
+						
+			-Get the size of a array:
+				#arraySize{name; index;}
+					
+	Static:
+		To declare a static array of size 10: 
+		
+				<array size='10'> name </array>
+		
+		Supported operations:
+			-Insertion at a index:
+				#arrayInsert{name; value; index;} 
+					
+			-Get a value at a index:
+				#arrayGet{name; index;}					
+
+
+Functions:
+------------------------------------------------------------------------------------------
+	Functions can be declared in the helper section, inside function bodys, and in
+	the main section when declaring object functions. A function tag requires a name and
+	allows for optional arguments.  Arguments must be separated by a semicolon.  
+	A function is declared as follows:
+	
+				<function id='name' args='x; y;'> </function>
+						
+				with no arguments:
+						
+					<function id='name'> </function>
+	
+	To call a function you use the pound symbol like in css when you operate on a id.  
+	You then type the function name and use { } to hold the arguments.  Arguments must be
+	separated by a semicolon.  A function call example is as follows:
+	
+				#name{1; 3;}	or	  #name{ }				
+					
+
+Anonymous Functions:
+------------------------------------------------------------------------------------------	
+	Anonymous functions work are declared and called just like regular functions but do 
+	not get an id when declared.  For example a anonymous function can be declared as 
+	follows:
+	
+				<lambda args='x; y;'> </lambda>
+				
+				with no arguments:
+						
+					<lambda> </lambda>
+					
+	To call a anonymous function you do as follows:
+	
+				#<lambda args='x; y;'> </lambda> {1; 3;}
+					
+				with no arguments:
+						
+					#<lambda> </lambda> {}
+						
+
+Iteration:
+------------------------------------------------------------------------------------------
+	SCML formally supports only while loops but recursion can also be used for iteration.
+	A while loop is declared as follows:
+	
+				<while check='condition'>
+					do something
+				</while>
+					
+	A while loop can be broken out of early if the "break" key word is used. 
+	
+	
+Input/Output:
+------------------------------------------------------------------------------------------	
+	SCML only supports file import for importing other SCML programs, but does not have a 
+	way read from standard input.  SCML does support two types of output: print, and
+	println.  Print will print the output followed by a new line.  Both print and 
+	println can take in strings, expressions, arrays, and function calls.  A print 
+	statement is as follows:
+	
+				<print> "a string " variable </print>
+						
+				or
+						
+				<println> "a string " variable </println>
+						
+	To importing a file is as follows:
+	
+				<link href='"fileName"'>
+						
+	Note the file name is a string surrounded by double quotes and that string is
+	surrounded by single quotes.
+							
+					
+Objects:
+------------------------------------------------------------------------------------------	
+	SCML supports basic data encapsulation using functions that return the "this" keyword.
+	To define a object in SCML you store the objects functions and variables in one 
+	main function that is located between the "main" tags.  This is best shown in a 
+	example.  Below is a basic abstract bag object definition.
+						
+			<!DOCTYPE scml>
+			<scml>
+    				<head>
+    				</head>
+    				<main>
+        				<!-- class Constructor -->
+        				<function id='AbstractBag'>
+           		 			<!-- class variables -->
+            				<assign> _size is 0</assign>
+            
+            				<!-- class operations -->
+            				<function id='length'>
+                				_size
+            				</function>
+        
+            				<function id='isEmpty'>
+                				#length{} == 0
+            				</function>
+
+            				<function id='incSize'>
+                				<assign> _size is _size++ </assign>
+            				</function>
+
+            				<function id='decSize'>
+                				<assign> _size is _size-- </assign>
+            				</function>
+            
+            				<!-- return pointer to class -->
+            				this
+        				</function>
+    				</main>
+    				<helper>
+    				</helper>
+			</scml>	
+			
+	To create an abstract bag object:
+	
+			<assign> bag is #AbstractBag{} </assign>
+					
+	To perform operations on the object you use a dot notation:
+					
+			bag.#isEmpty{} -> returns a boolean 
+					
+			bag.#incSize{} -> increments the bag size and returns the new size
+					
+			bag._size -> access the bag size variable	
+					
+					
+Comments:
+------------------------------------------------------------------------------------------	
+	Commenting in SCML is the same as in HTML.  A comment is as follows:
+	
+			<!-- SCML comment -->
+					

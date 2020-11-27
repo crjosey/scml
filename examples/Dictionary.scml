@@ -1,0 +1,307 @@
+<!DOCTYPE scml>
+<scml>
+    <head>
+    </head>
+    <main>
+        <!-- Class Constructor -->
+        <function id='Dictionary'>
+            <!-- class variables -->
+            <assign> root is null </assign>
+            <assign> _size is 0 </assign>
+            <assign> _this is this </assign>
+
+            <!-- internal operations -->
+            <function id='node'>
+                <assign> value is null </assign>
+                <assign> parent is null </assign>
+                <assign> left is null </assign>
+                <assign> right is null </assign>
+                <assign> height is null </assign>
+                <assign> leftHeight is null </assign>
+                <assign> rightHeight is null </assign>
+                this
+            </function>
+
+            <function id='getHeight' args='x;'>
+                <if check='!(x == null)'> x.height </if>
+                <else> 0 </else>
+            </function>
+
+            <function id='getLeftHeight' args='x;'>
+                <if check='!(x == null)'> x.leftHeight </if>
+                <else> 0 </else>
+            </function>
+
+            <function id='getRightHeight' args='x;'>
+                <if check='!(x == null)'> x.rightHeight </if>
+                <else> 0 </else>
+            </function>
+
+            <function id='nodeConstruct' args='v; p; l; r;'>
+                <println>"New Node Construct for: " v</println>
+                <assign> newNode is #node{} </assign>
+                <assign> newNode.value is v </assign>
+                <assign> newNode.parent is p </assign>
+                <assign> newNode.left is l </assign>
+                <assign> newNode.right is r </assign>
+                <assign> newNode.height is 1 </assign>
+                <assign> newNode.lHeight is 0 </assign>
+                <assign> newNode.rHeight is 0 </assign>
+                newNode
+            </function>
+
+            <function id='getBalance' args='x;'>
+                (#getHeight{x.left;} - #getHeight{x.right;})
+            </function>
+
+            <function id='balanced' args='x;'>
+                <assign> factor is #getBalance{x;} </assign>
+                <if check='(factor) == (-1)'> true </if>
+                <else if check='factor == 0'> true </else if>
+                <else if check='factor == 1'> true </else if>
+                <else> false </else>
+            </function>
+
+            <function id='setBalance' args='x;'>
+                <assign> x.lHeight is #getHeight{x.left;} </assign>
+                <assign> x.rHeight is #getHeight{x.right} </assign>
+                <if check='((x.lHeight) > (x.rHeight))'> <assign> x.height is (x.lHeight + 1) </assign> </if>
+                <else> <assign> x.height is (x.rHeight + 1) </assign> </else>
+            </function>
+
+            <function id='favorite' args='x;'>
+                <assign> balance is #getBalance{x;} </assign>
+                <if check='balance == 1'> x.left </if>
+                <else if check='balance == (-1)'> x.right </else if>
+                <else if check='balance == 0'> null </else if>
+                <else if check='#getHeight{x.left;} > #getHeight{x.right;}'> x.left </else if>
+                <else> x.right </else>
+            </function>
+
+            <function id='linear' args='c; p; gp;'>
+                <if check='((!(gp == null)) and ((!(p == null)) and (!(c == null))))'>
+                    <if check='((!(gp.left == null)) and (!(p.left == null)))'>
+                        <if check='(#eq{gp.left; p;}) and (#eq{p.left; c;})'> true </if>
+                        <else if check='((!(gp.right == null)) and (!(p.right == null)))'>
+                            <if check='(#eq{gp.right; p;}) and (#eq{p.right; c;})'> true </if>
+                        </else if>
+                        <else> false </else>
+                    </if>
+                    <else if check='((!(gp.right == null)) and (!(p.right == null)))'>
+                        <if check='(#eq{gp.right; p;}) and (#eq{p.right; c;})'> true </if>
+                    </else if>
+                    <else> false </else>
+                </if>
+                <else> false </else>
+            </function>
+
+            <function id='rightRotate' args='currNode;'>
+                <println>"starting right rotate"</println>
+                <if check='currNode == null'> <println> "Error: You can not rotate a null pointer" </println> </if>
+                <else>
+                    <!-- save and move subtrees -->
+                    <assign> rightSubTree is currNode.right </assign>
+                    <assign> currNode.right is currNode.parent </assign>
+                    <assign> currNode.right.left is rightSubTree </assign>
+
+                    <!-- update parents -->
+                    <if check='#eq{root; currNode.parent;}'>
+                        <assign> currNode.parent is currNode </assign>
+                        <assign> _this.root is currNode </assign>
+                    </if>
+                    <else>
+                        <assign> currNode.parent is currNode.parent.parent </assign>
+                    </else>
+                    <assign> currNode.right.parent is currNode </assign>
+                    <if check='!(rightSubTree == null)'>
+                        <assign> rightSubTree.parent is currNode.right </assign>
+                    </if>
+
+                    <!-- update currNode's parent -->
+                    <if check='!(#eq{root; currNode;})'>
+                        <if check='(currNode.parent.left.value) == (currNode.left.value)'>
+                            <if check='#eq{currNode.parent.left; currNode.right;}'>
+                                <assign> currNode.parent.left is currNode </assign>
+                            </if>
+                            <else> <assign> currNode.parent.right is currNode </assign> </else>
+                        </if>
+                        <else> <assign> currNode.parent.right is currNode </assign> </else>
+                    </if>
+                </else>
+            </function>
+
+            <function id='leftRotate' args='currNode;'>
+                <if check='currNode == null'> <println> "Error: You can not rotate a null pointer" </println> </if>
+                <else>
+                    <!-- save and move subtrees -->
+                    <assign> leftSubTree is currNode.left </assign>
+                    <assign> currNode.left is currNode.parent </assign>
+                    <assign> currNode.left.right is leftSubTree </assign>
+
+                    <!-- update parents -->
+                    <if check='#eq{root; currNode.parent;}'>
+                        <assign> currNode.parent is currNode </assign>
+                        <assign> _this.root is currNode </assign>
+                    </if>
+                    <else>
+                        <assign> currNode.parent is currNode.parent.parent </assign>
+                    </else>
+                    <assign> currNode.left.parent is currNode </assign>
+                    <if check='!(leftSubTree == null)'>
+                        <println>"left sub tree is null"</println>
+                        <assign> leftSubTree.parent is currNode.left </assign>
+                    </if>
+
+                    <!-- update currNode's parent -->
+                    <if check='!(#eq{root; currNode;})'>
+                        <if check='!(currNode.parent.left == null)'>
+                            <if check='#eq{currNode.parent.left; currNode.left;}'>
+                                <assign> currNode.parent.left is currNode </assign>
+                            </if>
+                            <else> <assign> currNode.parent.right is currNode </assign> </else>
+                        </if>
+                        <else> <assign> currNode.parent.right is currNode </assign> </else>
+                    </if>
+                </else>
+            </function>
+            <function id='displayNode' args='x;'>
+                <println> "NODE: " x.value " left: " x.left " right: " x.right " parent: " x.parent.value </println>
+            </function>
+
+            <function id='insertionFixUp' args='x;'>
+                <println> "insertion fix up started: " #displayNode{x;} </println>
+
+                <while check='(!(#eq{root; x;})) and (!(x == null))'>
+                    <assign> fav is #favorite{x.parent;} </assign>
+                    <if check='(!(fav == null)) and (!(#eq{fav; x;}))'>
+                        <println> "case 1"</println>
+                        #setBalance{x.parent;}
+                        <println> #displayNode{x;} </println>
+                        break
+                    </if>
+                    <else if check='#balanced{x.parent;}'>
+                        <println> "case 2"</println>
+                        #setBalance{x.parent;}
+                        <println> #displayNode{x;} </println>
+                        <assign> x is x.parent </assign>
+                    </else if>
+                    <else>
+                        <println> "case 3"</println>
+                        <assign> y is #favorite{x;} </assign>
+                        <assign> p is x.parent </assign>
+                        <if check='((y == null) and (!(x.parent == null)))'>
+                            <if check='#eq{x; x.parent.left;}'> #rightRotate{x;} </if>
+                            <else> #leftRotate{x;} </else>
+                            #setBalance{p;}
+                            #setBalance{x;}
+                            <println> #displayNode{x;} </println>
+                            break
+                        </if>
+                        <else if check='((!(#linear{y; x; p;})) and (!(x.parent == null)))'>
+                            <if check='#eq{y; y.parent.left;}'> #rightRotate{y;} </if>
+                            <else> #leftRotate{y;} </else>
+                            <if check='#eq{y; y.parent.left;}'> #rightRotate{y;} </if>
+                            <else> #leftRotate{y;} </else>
+                            #setBalance{x;}
+                            #setBalance{p;}
+                            #setBalance{y;}
+                            <println> #displayNode{x;} </println>
+                            break
+                        </else if>
+                        <else if check='!(x.parent == null)'>
+                            <if check='#eq{x; x.parent.left;}'> #rightRotate{x;} </if>
+                            <else> #leftRotate{x;} </else>
+                            #setBalance{p;}
+                            #setBalance{x;}
+                            <println> #displayNode{x;} </println>
+                            break
+                        </else if>
+                        break
+                    </else>
+                </while>
+                <println> "insertion fix up completed: " #displayNode{x;} </println>
+            </function>
+
+            <!-- class operations -->
+            <function id='add' args='x;'>
+                <println>"INSERTING: " x</println>
+                <assign> probe is _this.root </assign>
+                <if check='probe == null'>
+                    <assign> newNode is #nodeConstruct{x; null; null; null;} </assign>
+                    <assign> newNode.parent is newNode </assign>
+                    <assign> _this.root is newNode </assign>
+                    <println> "ROOT is null" </println>
+                    <println> "ROOT is: " #displayNode{_this.root;} </println>
+                    <println> "New root is: NEWNODE: " #displayNode{newNode;} </println>
+                    #insertionFixUp{newNode;}
+                    <assign> _this._size is _this._size++ </assign>
+                    <println> "This size is: " _this._size </println>
+                </if>
+                <else>
+                    <!--<println> "probe is " probe.value </println>
+                    <println> "root is " root.value </println>-->
+                    <while check='true'>
+                        <if check='(x < (probe.value))'>
+                            <if check='(probe.left) == null'>
+                                <assign> newNode is #nodeConstruct{x; probe; null; null;} </assign>
+                                <assign> probe.left is newNode </assign>
+                                #insertionFixUp{newNode;}
+                                <assign> _this._size is _this._size++ </assign>
+                                break
+                            </if>
+                            <else> <assign> probe is probe.left </assign></else>
+                        </if>
+                        <if check='x == (probe.value)'> break </if>
+                        <else>
+                            <if check='(probe.right) == null'>
+                                <assign> newNode is #nodeConstruct{x; probe; null; null;} </assign>
+                                <assign> probe.right is newNode </assign>
+                                #insertionFixUp{newNode;}
+                                <assign> _this._size is _this._size++ </assign>
+                                break
+                            </if>
+                            <else> <assign> probe is probe.right </assign> </else>
+                        </else>
+                    </while>
+                </else>
+            </function>
+
+            <function id='statistics'>
+                <function id='statisticsHelper' args='node; level;'>
+                    <if check='!(node == null)'>
+                        <println> #displayNode{node;} </println>
+                        <if check='level == 1'> <print> node.value ":" #getBalance{node;} " " </print> </if>
+                        <else if check='level > 1'>
+                            #statisticsHelper{node.left; (level--);}
+                            #statisticsHelper{node.right; (level--);}
+                        </else if>
+                    </if>
+                </function>
+                <assign> h is _this.root.height </assign>
+                <println> "root hight is: " h </println>
+                <function id='iter' args='i;'>
+                        <if check='i <= h'> #statisticsHelper{_this.root; i;} </if>
+                        <else> #iter{i++} </else>
+                </function>
+                <println> "start stats" </println>
+                <println> #displayNode{root;} </println>
+                #iter{1;}
+                <println></println>
+            </function>
+
+            <function id='length'>
+                _size
+            </function>
+
+            <function id='isEmpty'>
+                #length{} == 0
+            </function>
+
+            <!-- return pointer to class -->
+            this
+        </function>
+        <println>"Dictionary Class loaded"</println>
+    </main>
+    <helper>
+    </helper>
+</scml>

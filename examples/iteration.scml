@@ -1,0 +1,23 @@
+<!DOCTYPE scml>
+<scml>
+    <head>  
+    </head>
+    <main>
+        <assign> num is 0 </assign>
+        <while check='num <= 5'>
+            <println> "factorial " num " is: " #factorial{num;} </println>
+            <assign>num is num + 1</assign>
+        </while>
+    </main>
+    <helper>
+        <function id='factorial' args='n;'>
+            <assign> i is 1 </assign>
+            <assign> total is 1 </assign>
+            <while check='i < (n + 1)'>
+                <assign> total is total * i </assign>
+                i++
+            </while>
+            total
+        </function>
+    </helper>
+</scml>

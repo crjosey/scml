@@ -1,0 +1,38 @@
+<!DOCTYPE scml>
+<scml>
+    <head>
+        <global><assign> bases is 4 </assign></global>  
+    </head>
+    <main>
+    	<assign> condition is 
+    		<lambda args='x;'>
+    			<if check='x == 4'> "HOME RUN!!!" </if>
+    			<else if check='x == 3'> "TrIpLe!!" </else if>
+    			<else if check='x == 2'> "Double!" </else if>
+    			<else if check='x == 1'> "single" </else if>
+    			<else> "out" </else>
+    		</lambda>
+    	</assign>
+    	
+    	<print> "bases is 4 -> " </print>
+    	<println> #condition{bases;} </println>
+    	
+    	<assign> bases is 3 </assign>
+    	<print> "bases is 3 -> " </print>
+    	<println> #condition{bases;} </println>
+    	
+    	<assign> bases is 2 </assign>
+    	<print> "bases is 2 -> " </print>
+    	<println> #condition{bases;} </println>
+    	
+    	<assign> bases is 1 </assign>
+    	<print> "bases is 1 -> " </print>
+    	<println> #condition{bases;} </println>
+    	
+    	<assign> bases is 0 </assign>
+    	<print> "bases is 0 -> " </print>
+    	<println> #condition{bases;} </println>	
+    </main>
+    <helper>
+    </helper>
+</scml>

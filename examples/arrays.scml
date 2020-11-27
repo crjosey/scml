@@ -1,0 +1,52 @@
+<!DOCTYPE scml>
+<scml>
+    <head>
+    </head>
+    <main>
+        <!-- Dynamic Array and Operations -->
+        <array> dynamicArray </array>
+        <println> "dynamicArray is " dynamicArray </println>
+        <println> " " </println>
+        
+        <println> "Adding string 'test' to the dynamic array: " </println> 
+        <println> "#arrayAdd{dynamicArray; 'Test';} is " #arrayAdd{dynamicArray; "Test";} </println>
+        <println> " " </println>
+        
+        <println> "Inserting string 'CHECK' into index 0 of dynamicArray" </println>
+        <println> "#arrayInsert{dynamicArray; 'CHECK'; 0;} is "  #arrayInsert{dynamicArray; "CHECK"; 0;}</println>
+        <println> " " </println>
+        
+        <println> "Getting index 0 of dynamicArray" </println>
+        <println> "#arrayGet{dynamicArray; 0;} is " #arrayGet{dynamicArray; 0;} </println>
+        <println> " " </println>
+        
+        <println> "dynamicArray is " dynamicArray </println>
+        <println> " " </println>
+        
+        <!-- Static Array and Operations -->
+        <array size='10'> staticArray </array>
+        <println> "staticArray of size 10 is " staticArray </println>
+        <println> " " </println>
+        
+        <println> "Inserting string 'Test' into index 0 of staticArray" </println>
+        <println> "#arrayInsert{staticArray; 'Test'; 0;} is " #arrayInsert{staticArray; "Test"; 0;} </println>
+        <println> " " </println>
+        
+        <println> "Inserting integer 10 into index 1 of staticArray" </println>
+        <println> "#arrayInsert{staticArray; 10; 1;} is " #arrayInsert{staticArray; 10; 1;} </println>
+        <println> " " </println>
+        
+        <println> "Inserting integer 12 into index 0 of staticArray" </println>
+        <println> "#arrayInsert{staticArray; 12; 0;} is " #arrayInsert{staticArray; 12; 0;} </println>
+        <println> " " </println>
+        
+        <println> "Getting index 0 of staticArray" </println>
+        <println> "#arrayGet{staticArray; 0;} is " #arrayGet{staticArray; 0;} </println>
+        <println> " " </println>
+        
+        <println> "staticArray is " staticArray </println>
+        <println> " " </println>
+    </main>
+    <helper>
+    </helper>
+</scml>

@@ -1,0 +1,58 @@
+<!-- Sudo Code Markup Language "Stack" Class -->
+<!DOCTYPE scml>
+<scml>
+    <head>
+    </head>
+    <main>
+        <!-- class Constructor -->
+        <function id='Stack'>
+            <!-- class variables -->
+            <assign> _this is this </assign>
+            <assign> _size is 0 </assign>
+            <assign> _top is null </assign>
+            
+            <function id='stackNode' args='v; n;'>
+                <assign> value is v </assign>
+                <assign> next is n </assign>
+                this
+            </function>
+            
+            <!-- class operations -->
+            <function id='length'>
+                _size
+            </function>
+        
+            <function id='isEmpty'>
+                #length{} == 0
+            </function>
+
+            <function id='incSize'>
+                <assign> _size is _size++ </assign>
+            </function>
+
+            <function id='decSize'>
+                <assign> _size is _size-- </assign>
+            </function>
+            
+            <function id='push' args='v;'>
+                <assign> newNode is #stackNode {v; _this._top;} </assign>
+                <assign> _this._top is newNode </assign>
+                #incSize{}
+            </function>
+            
+            <function id='pop'>
+                <assign> curr is _this._top </assign>
+                <assign> next is curr.next </assign>
+                <assign> curr.next is null </assign>
+                <assign> _this._top is next </assign>
+                #decSize{}
+                curr.value
+            </function>
+            
+            <!-- return pointer to class -->
+            this
+        </function>
+    </main>
+    <helper>
+    </helper>
+</scml>

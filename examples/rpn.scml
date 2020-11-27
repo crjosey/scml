@@ -1,0 +1,72 @@
+<!DOCTYPE scml>
+<scml>
+    <head>
+        <link href='"./examples/Stack.scml"'>
+    </head>
+    <main>
+        <array> input </array>
+        #arrayAdd {input; 5;}
+        #arrayAdd {input; 1;}
+        #arrayAdd {input; 2;}
+        #arrayAdd {input; "+";}
+        #arrayAdd {input; 4;}
+        #arrayAdd {input; "*";}
+        #arrayAdd {input; "+";}
+        #arrayAdd {input; 3;}
+        #arrayAdd {input; "-";}
+        <println> "RPN of (5 1 2 + 4 * + 3 -) is " #rpn {input;} </println>
+        <println> "     it should be 14" </println>
+        
+        <array> input </array>
+        #arrayAdd {input; 5;}
+        #arrayAdd {input; 2;}
+        #arrayAdd {input; 3;}
+        #arrayAdd {input; "^";}
+        #arrayAdd {input; "+";}
+        #arrayAdd {input; 5;}
+        #arrayAdd {input; 8;}
+        #arrayAdd {input; "+";}
+        <println> "RPN of (5 2 3 ^ + 5 8 +) is " #rpn {input;} </println>
+        <println> "     it should be 13" </println>
+        
+        <array> input </array>
+        #arrayAdd {input; 2;}
+        #arrayAdd {input; 1;}
+        #arrayAdd {input; 12;}
+        #arrayAdd {input; 3;}
+        #arrayAdd {input; "/";}
+        #arrayAdd {input; "-";}
+        #arrayAdd {input; "+";}
+        <println> "RPN of (2 1 12 3 / - + ) is " #rpn {input;} </println>
+        <println> "     it should be -1" </println>
+        
+    </main>
+    <helper>
+        <function id='rpn' args='input;'>
+            <assign> stack is #Stack{} </assign>
+            
+            <assign> index is 0 </assign>
+            <assign> problemSize is #arraySize{input;} </assign>
+            <while check='index < problemSize'>
+                <assign> arg is #arrayGet{input; index;} </assign>
+                <if check='#isInt{arg;}'>
+                    stack.#push{arg;}
+                    index++
+                </if>
+                <else>
+                    <assign> left is stack.#pop{} </assign>
+                    <assign> right is stack.#pop{} </assign>
+                    <if check='arg == "+"'> <assign> value is (left + right) </assign> </if>
+                    <else if check='arg == "*"'> <assign> value is (left * right) </assign> </else if>
+                    <else if check='arg == "-"'> <assign> value is (right - left) </assign> </else if>
+                    <else if check='arg == "/"'> <assign> value is (right \ left) </assign> </else if>
+                    <else if check='arg == "^"'> <assign> value is (right ^ left) </assign> </else if>
+                    <else> <println> "ERROR: Bad operation" </println> break </else>
+                    stack.#push{value;}
+                    index++
+                </else>
+            </while>
+            stack.#pop{}
+        </function>
+    </helper>
+</scml>

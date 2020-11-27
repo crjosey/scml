@@ -1,0 +1,31 @@
+<!DOCTYPE scml>
+<scml>
+    <head>  
+    </head>
+    <main>
+        <assign> num is 0 </assign>
+        <while check='num <= 10'>
+            <println> "fib " num " is: " #fib{num;} </println>
+            num++
+        </while>
+        
+        <println></println>
+        
+        <assign> num is 0 </assign>
+        <while check='num <= 5'>
+            <println> "factorial " num " is: " #factorial{num;} </println>
+            <assign>num is num + 1</assign>
+        </while>
+    </main>
+    <helper>
+    	<function id='fib' args='n;'>
+            <if check='n < 2'> n </if>
+            <else> (#fib {(n - 1);} + #fib {(n - 2);}) </else>
+        </function>
+    
+        <function id='factorial' args='n;'>
+            <if check='n == 0'> 1 </if>
+            <else> (n * #factorial {(n - 1);}) </else>
+        </function>
+    </helper>
+</scml>

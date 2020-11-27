@@ -10,7 +10,7 @@
 SCML was designed to be familiar to a graphic designer that knows how to code in HTML and 
 CSS.  Like HTML SCML requires an open and close tag around most operations.  The SCML
 tags are intended to markup sudo code similar to how you can markup a text document with 
-HTML tags. Below is the minimum code required for a SCML file to run.  Note all tags and 
+HTML tags. Below is the minimum code required for a SCML file to run.  Note, all tags and 
 keywords are lower case with the exception of DOCTYPE.
 
 	<!DOCTYPE scml>
